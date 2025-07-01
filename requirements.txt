@@ -1,13 +1,5 @@
-numpy
+streamlit
 pandas
-matplotlib
-seaborn
 plotly
-scikit-learn
-tensorflow-cpu
-keras
-yfinance
-Cython
-pmdarima
-statsmodels
-prophet==1.1.4
+numpy
+
