@@ -8,7 +8,7 @@ st.set_page_config(page_title="Stock Dashboard", layout="wide")
 st.title("📈 Stock Price Dashboard")
 
 # ✅ Load your dataset (update the path if needed)
-df = pd.read_csv("C:/Users/Pavithra/Downloads/archive (22)/nasdq/nasdq.csv", parse_dates=["Date"], index_col="Date")
+df = pd.read_csv("nasdq.csv", parse_dates=["Date"], index_col="Date")
 
 # ✅ Show actual columns
 st.sidebar.write("Columns in dataset:", df.columns.tolist())
