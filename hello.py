@@ -59,9 +59,6 @@ st.dataframe(df.head(10))
 st.set_page_config(page_title="Commodity Price Dashboard", layout="wide")
 st.title("📈 Commodity Price Dashboard: Gold & Oil")
 
-# 📋 Display raw columns in sidebar
-st.sidebar.header("Available Columns")
-st.sidebar.write(df.columns.tolist())
 
 # ✅ Button to visualize monthly close
 if st.button("📅 Show Monthly Close for Gold and Oil"):
