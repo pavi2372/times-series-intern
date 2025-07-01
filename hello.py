@@ -1,35 +1,3 @@
-# Save this as app.py
-import pandas as pd
-import streamlit as st
-import plotly.graph_objects as go
-import numpy as np
-
-st.set_page_config(page_title="Stock Dashboard", layout="wide")
-st.title("📈 Stock Price Dashboard")
-
-# ✅ Load your dataset (update the path if needed)
-df = pd.read_csv("nasdq.csv", parse_dates=["Date"], index_col="Date")
-
-# ✅ Show actual columns
-st.sidebar.write("Columns in dataset:", df.columns.tolist())
-
-# ✅ Use 'close' or 'Close' depending on your file
-col_name = "close" if "close" in df.columns else "Close"
-
-# ✅ Plot actual stock prices
-fig = go.Figure()
-fig.add_trace(go.Scatter(x=df.index, y=df[col_name], mode='lines', name='Actual Close'))
-
-# ✅ Customize plot
-fig.update_layout(
-    title="Stock Price",
-    xaxis_title="Date",
-    yaxis_title="Price",
-    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-    template="plotly_white"
-)
-
-st.plotly_chart(fig, use_container_width=True)
 
 # app.py
 
@@ -88,4 +56,53 @@ st.plotly_chart(fig, use_container_width=True)
 st.subheader("📋 Data Preview")
 st.dataframe(df.head(10))
 
+st.set_page_config(page_title="Commodity Price Dashboard", layout="wide")
+st.title("📈 Commodity Price Dashboard: Gold & Oil")
+
+# 📋 Display raw columns in sidebar
+st.sidebar.header("Available Columns")
+st.sidebar.write(df.columns.tolist())
+
+# ✅ Button to visualize monthly close
+if st.button("📅 Show Monthly Close for Gold and Oil"):
+
+    # 🧠 Resample monthly using last available value (end of month close)
+    monthly_df = df[["Gold", "Oil"]].resample("M").last()
+
+    # 🟡 Plot for Gold
+    fig_gold = go.Figure()
+    fig_gold.add_trace(go.Scatter(
+        x=monthly_df.index,
+        y=monthly_df["Gold"],
+        mode='lines+markers',
+        name='Gold Monthly Close',
+        line=dict(color='gold')
+    ))
+    fig_gold.update_layout(
+        title="Gold Monthly Closing Price",
+        xaxis_title="Month",
+        yaxis_title="Price",
+        template="plotly_white"
+    )
+    st.plotly_chart(fig_gold, use_container_width=True)
+
+    # 🛢️ Plot for Oil
+    fig_oil = go.Figure()
+    fig_oil.add_trace(go.Scatter(
+        x=monthly_df.index,
+        y=monthly_df["Oil"],
+        mode='lines+markers',
+        name='Oil Monthly Close',
+        line=dict(color='black')
+    ))
+    fig_oil.update_layout(
+        title="Oil Monthly Closing Price",
+        xaxis_title="Month",
+        yaxis_title="Price",
+        template="plotly_white"
+    )
+    st.plotly_chart(fig_oil, use_container_width=True)
+
+else:
+    st.info("Click the button above to visualize monthly Gold and Oil prices.")
 
