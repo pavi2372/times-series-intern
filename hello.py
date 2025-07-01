@@ -31,3 +31,61 @@ fig.update_layout(
 
 st.plotly_chart(fig, use_container_width=True)
 
+# app.py
+
+# 📦 Importing required libraries
+import pandas as pd
+import streamlit as st
+import plotly.graph_objects as go
+import numpy as np
+
+# 🎨 Configure the Streamlit page layout and title
+st.set_page_config(page_title="Stock Dashboard", layout="wide")
+st.title("📈 Stock Price Dashboard")
+
+# 📁 Load dataset (must be in the same directory as app.py)
+# 'Date' is parsed as a datetime and set as index for time series plotting
+df = pd.read_csv("nasdq.csv", parse_dates=["Date"], index_col="Date")
+
+# 🧾 Display all column names in the sidebar for clarity
+st.sidebar.header("Dataset Info")
+st.sidebar.write("Columns available in the dataset:", df.columns.tolist())
+
+# 🧠 Select correct column for closing price (case-insensitive handling)
+col_name = "close" if "close" in df.columns else "Close"
+
+# 📊 Initialize a Plotly figure to display stock closing price over time
+fig = go.Figure()
+
+# 🟢 Add actual closing prices to the plot
+fig.add_trace(go.Scatter(
+    x=df.index,
+    y=df[col_name],
+    mode='lines',
+    name='Actual Close',
+    line=dict(color='blue')
+))
+
+# 🛠️ Customize the layout for better visual interpretation
+fig.update_layout(
+    title="Stock Price Over Time",
+    xaxis_title="Date",
+    yaxis_title="Stock Price (Closing)",
+    legend=dict(
+        orientation="h",
+        yanchor="bottom",
+        y=1.02,
+        xanchor="right",
+        x=1
+    ),
+    template="plotly_white"
+)
+
+# 📈 Render the Plotly chart inside the Streamlit app
+st.plotly_chart(fig, use_container_width=True)
+
+# 🧾 Optional: Show a snapshot of the data table for user reference
+st.subheader("📋 Data Preview")
+st.dataframe(df.head(10))
+
+
